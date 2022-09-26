@@ -1,9 +1,7 @@
 
-const getDefaultState = () => {
-
+const state = {
+  user: ''
 }
-
-const state = getDefaultState()
 
 const mutations = {
 
