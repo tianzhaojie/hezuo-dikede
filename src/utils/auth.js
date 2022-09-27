@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'vue_admin_template_token'
+const TokenKey = 'user-token' // 第一一个唯一的键名
 
 export function getToken() {
   return Cookies.get(TokenKey)

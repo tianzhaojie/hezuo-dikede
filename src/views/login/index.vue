@@ -30,7 +30,7 @@
           <img :src="imgData" alt="">
         </span>
       </el-form-item>
-      <el-button type="primary" style="width:100%;margin-bottom:30px;" @click="login">登录</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click="login">登录</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -44,12 +44,15 @@
 <script>
 import { loginCode } from '@/api/login'
 import { loginAPI } from '@/api/login'
+import { getUserInfo } from '@/api/user'
 export default {
   name: 'Login',
   data() {
     return {
       passwordType: 'password',
+      loading: false,
       loginForm: {
+
         loginName: 'admin',
         password: 'admin',
         code: '',
@@ -96,10 +99,23 @@ export default {
       this.getCode()
     },
     async login() {
-      const res = await loginAPI(this.loginForm)
-      console.log(res)
-      if (res.data.msg === '登录成功') { this.$router.push({ path: '/dashboard' }) } else {
-        this.$message.error(res.data.msg)
+      try {
+        this.loading = true
+        const { data } = await loginAPI(this.loginForm)
+        console.log(data)
+
+        if (data.msg === '登录成功') {
+          this.$store.commit('user/SET_TOKEN', data.token)
+          // 获取用户信息
+          const res = await getUserInfo(data.userId)
+          console.log(res)
+          this.$router.push({ path: '/dashboard' })
+        } else {
+          this.loading = false
+          this.$message.error(data.msg)
+        }
+      } finally {
+        this.loading = false
       }
     }
 
