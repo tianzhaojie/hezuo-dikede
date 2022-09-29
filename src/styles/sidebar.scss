@@ -14,7 +14,7 @@
     height: 100%;
     position: fixed;
     font-size: 0px;
-    top: 0;
+    top: 60px;
     bottom: 0;
     left: 0;
     z-index: 1001;
@@ -54,6 +54,7 @@
     }
 
     .svg-icon {
+      font-size: 16px;
       margin-right: 16px;
     }
 
@@ -71,6 +72,7 @@
     // menu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
+      color: black !important;
       &:hover {
         background-color: $menuHover !important;
       }
@@ -93,7 +95,7 @@
 
   .hideSidebar {
     .sidebar-container {
-      width: 54px !important;
+      width: 167px !important;
     }
 
     .main-container {
@@ -101,7 +103,7 @@
     }
 
     .submenu-title-noDropdown {
-      padding: 0 !important;
+    
       position: relative;
 
       .el-tooltip {
@@ -122,7 +124,6 @@
 
       &>.el-submenu__title {
         padding: 0 !important;
-
         .svg-icon {
           margin-left: 20px;
         }

@@ -44,7 +44,7 @@
 <script>
 import { loginCode } from '@/api/login'
 import { loginAPI } from '@/api/login'
-import { getUserInfo } from '@/api/user'
+
 export default {
   name: 'Login',
   data() {
@@ -106,10 +106,9 @@ export default {
 
         if (data.msg === '登录成功') {
           this.$store.commit('user/SET_TOKEN', data.token)
-          // 获取用户信息
-          const res = await getUserInfo(data.userId)
-          console.log(res)
-          this.$router.push({ path: '/dashboard' })
+          this.$store.commit('user/SET_TOKEN_TIEM', Date.now()) // Date.now()获取当前时间时间戳
+          this.$store.commit('user/SET_USER_ID', data.userId)
+          this.$router.push({ path: '/home' })
         } else {
           this.loading = false
           this.$message.error(data.msg)

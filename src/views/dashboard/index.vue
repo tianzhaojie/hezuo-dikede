@@ -1,5 +1,7 @@
 <template>
-  <div />
+  <div class="dikede">
+    帝可德
+  </div>
 </template>
 
 <script>
@@ -25,4 +27,5 @@ export default {
     line-height: 46px;
   }
 }
+
 </style>

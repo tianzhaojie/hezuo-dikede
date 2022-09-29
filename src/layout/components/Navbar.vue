@@ -1,50 +1,43 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
 
-    <breadcrumb class="breadcrumb-container" />
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
+    <div class="pic">
+      <img src="@/assets/common/logoone.png" alt="">
+    </div>
 
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              Home
-            </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-row>
+        <el-col :span="5">
+          <img src="@/assets/common/user.png" alt="">
+        </el-col>
+        <el-col :span="14">欢迎您,{{ userInfo.roleName }}</el-col>
+        <el-col :span="5">
+          <el-tooltip class="item" effect="dark" content="退出登录" placement="bottom">
+
+            <el-button class="el-icon-caret-bottom" @click="loginout">退出</el-button>
+          </el-tooltip>
+        </el-col>
+      </el-row>
     </div>
-  </div>
-</template>
+  </div></template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
+// import Breadcrumb from '@/components/Breadcrumb'
+// import Hamburger from '@/components/Hamburger'
 
 export default {
   components: {
-    Breadcrumb,
-    Hamburger
+    //   Breadcrumb,
+    // Hamburger
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'userInfo'
     ])
   },
   methods: {
@@ -54,6 +47,12 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    loginout() {
+      this.$store.commit('user/REMOVE_TOKEN')
+      this.$store.commit('user/REMOVE_USER_INFO')
+      this.$store.commit('user/REMOVE_USERID')
+      this.$router.push(`/login`)
     }
   }
 }
@@ -61,22 +60,23 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
+  width: 100%;
+  height: 60px;
   overflow: hidden;
-  position: relative;
-  background: #fff;
+  position: fixed;
+  left: 0;
+  background: url('~@/assets/common/backgroundone.png');
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, .025)
+  .pic{
+    margin-top: 6px;
+    margin-left: 15px;
+    position: absolute;
+    top: 4px;
+    width: 88px;
+    height: 36px;
+    img{
+      width: 100%;
     }
   }
 
@@ -85,30 +85,29 @@ export default {
   }
 
   .right-menu {
+    margin-right: 34px;
+    width: 240px;
     float: right;
     height: 100%;
-    line-height: 50px;
-
-    &:focus {
-      outline: none;
+    line-height: 60px;
+    .el-button{
+      background:#5373e0;
+      border: none;
     }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, .025)
-        }
+    .el-col-14{
+    text-align: center;
+    }
+    .el-col-5{
+      color:#fff;
+      .el-button{
+        background: transparent;
+        color: #fff;
       }
+      img{
+        padding-top: 12px;
+      }
+
+    }
     }
 
     .avatar-container {
@@ -135,5 +134,5 @@ export default {
       }
     }
   }
-}
+
 </style>
