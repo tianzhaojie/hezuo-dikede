@@ -4,7 +4,7 @@ import router from '@/router'
 import { Message } from 'element-ui'
 // import { Message } from 'element-ui'
 // token失效问题主动处理 定义函数
-const tokenFailureTime = 3600 // 定义token失效时间 时间戳 单位s
+const tokenFailureTime = 3600000 // 定义token失效时间 时间戳 单位s
 const isTokentime = () => {
   const currenTTime = Date.now()
   const stamp = (currenTTime - store.state.user.tokenTime) / 1000
@@ -42,7 +42,6 @@ serve.interceptors.response.use(response => {
   if (response.status === 200) { // 一般200为成功
     return response
   }
-  console.log(11)
   return response // 防止响应其他状态
 }, error => {
   if (error.response?.status === 401) {
@@ -56,7 +55,6 @@ serve.interceptors.response.use(response => {
     router.push(`/login`)
   } else {
     Message.error((error))
-    console.log(111)
   }
   return Promise.reject(error)
 })

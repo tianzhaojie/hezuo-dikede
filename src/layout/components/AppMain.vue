@@ -24,7 +24,7 @@ export default {
   width: 100%;
   position: relative;
   top: 60px;
-  left: 120px;
+  /* left: 120px; */
   padding: 30px;
   overflow: hidden;
 }
