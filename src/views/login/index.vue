@@ -108,7 +108,7 @@ export default {
           this.$store.commit('user/SET_TOKEN', data.token)
           this.$store.commit('user/SET_TOKEN_TIEM', Date.now()) // Date.now()获取当前时间时间戳
           this.$store.commit('user/SET_USER_ID', data.userId)
-          this.$router.push({ path: '/home' })
+          this.$router.push({ path: '/dashboard' })
         } else {
           this.loading = false
           this.$message.error(data.msg)

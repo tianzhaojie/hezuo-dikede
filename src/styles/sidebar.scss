@@ -9,7 +9,7 @@
 
   .sidebar-container {
     transition: width 0.28s;
-    width: $sideBarWidth !important;
+    width: 167px !important;
     background-color: $menuBg;
     height: 100%;
     position: fixed;
@@ -99,7 +99,7 @@
     }
 
     .main-container {
-      margin-left: 54px;
+      // margin-left: 54px;
     }
 
     .submenu-title-noDropdown {
