@@ -1,7 +1,7 @@
 <template>
 
   <div class="dashboard-container">
-    <el-row type="flex" justify="space-around">
+    <el-row type="flex" justify="space-between">
       <el-col :span="18">
         <el-row type="flex" justify="space-around">
           <!-- 工单统计 -->
@@ -49,18 +49,46 @@
           </el-col>
         </el-row>
         <!-- 销售数据 -->
-        <el-row>
-          <el-col :span="24" class="data" />
+        <el-row class="xssj" type="flex">
+          <div class="title">
+            <h4>工单统计</h4>
+            <span>2022.9.01~2022.9.29</span>
+          </div>
+          <div class="charts">
+            <div id="LineChart" />
+            <div id="Bar" />
+          </div>
+
         </el-row>
       </el-col>
       <!-- 排行榜 -->
       <el-col :span="6" class="products"><div class="grid-content bg-purple-light" /></el-col>
+    </el-row>
+    <el-row type="flex" :gutter="20" class="footer">
+      <el-col :span="12">
+        <div class="hezuo">
+          <div class="title">
+            <h4>合作商点位数top5</h4>
+
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="shebei">
+          <div class="title">
+            <h4>异常设备监控</h4>
+
+          </div>
+        </div>
+
+      </el-col>
     </el-row>
   </div>
 
 </template>
 
 <script>
+import charts from '@/echarts/index'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -69,6 +97,72 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  mounted() {
+    this.getEcharts()
+    this.getEchartsBar()
+  },
+  methods: {
+    getEchartsBar() {
+      var chartDom = document.getElementById('Bar')
+      var myChart = charts.init(chartDom)
+      var option
+
+      option = {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [5565, 2953, 150, 80, 70, 110, 130],
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
+          }
+        ]
+      }
+
+      option && myChart.setOption(option)
+    },
+    getEcharts() {
+      var chartDom = document.getElementById('LineChart')
+      if (chartDom) {
+        var myChart = charts.init(chartDom)
+        var option
+
+        option = {
+          xAxis: {
+            type: 'category',
+            data: ['星期一', '星期二', '星球上', '星期四', '星期五', '星期六'],
+            boundaryGap: false
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [5565, 2953, 4597, 2134, 5430, 0],
+              type: 'line',
+              smooth: true,
+              lineStyle: {
+                color: 'rgba(255, 87, 87)'
+              },
+              itemStyle: {
+                color: 'rgba(255, 255, 255)'
+              }
+            }
+          ]
+        }
+
+        option && myChart.setOption(option)
+      }
+    }
   }
 }
 </script>
@@ -88,21 +182,13 @@ export default {
   }
 }
 .gdgl{
+  background: url('~@/assets/common/circle.png') no-repeat,
+              url('~@/assets/common/task.png') right bottom no-repeat;
   border-radius: 20px;
   padding: 20px;
   height: 166px;
   background-color: #e9f3ff;
-  .title{
-    display: flex;
-    align-items: center;
-    span{
-      font-weight: 400;
-    color: #999;
-      font-size: 12px;
-      margin-left: 10px;
-    }
 
-  }
   .bottom{
      .number{
       .el-col-6{
@@ -122,6 +208,7 @@ export default {
     }
 }
 .sstj {
+  background: url('~@/assets/common/pinkpig.png') right bottom no-repeat;
   border-radius: 20px;
   padding: 20px;
   height: 166px;
@@ -169,6 +256,55 @@ export default {
 .products {
 
   background: green;
-  height: 530px;
+  height: 538px;
 }
+.xssj{
+  padding: 20px;
+  flex-direction: column;
+  margin-top: 20px;
+  min-height: 352px;
+  background-color: gold;
+  margin-right:10px;
+  .title{
+    height: 34px;
+    display: flex;
+   align-items: center;
+  }
+ .charts{
+  flex: 1;
+  display: flex;
+  #Bar {
+    flex: 1;
+  }
+  #LineChart{
+
+    flex:1
+  }
+ }
+}
+.title{
+    display: flex;
+    align-items: center;
+    span{
+      font-weight: 400;
+    color: #999;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+
+  }
+.footer{
+  margin-top: 20px;
+  height: 353px;
+ .hezuo {
+  padding: 20px;
+  background-color: #ccc;
+  height: 100%;
+ }
+ .shebei {
+  padding: 20px;
+  background-color: yellow;
+  height: 100%;
+ }
+  }
 </style>
