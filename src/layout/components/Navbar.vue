@@ -21,7 +21,8 @@
         </el-col>
       </el-row>
     </div>
-  </div></template>
+  </div>
+</template>
 
 <script>
 import { mapGetters } from 'vuex'
@@ -65,9 +66,10 @@ export default {
   overflow: hidden;
   position: fixed;
   left: 0;
+  top: 0;
   background: url('~@/assets/common/backgroundone.png');
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
-
+z-index: 9999;
   .pic{
     margin-top: 6px;
     margin-left: 15px;
