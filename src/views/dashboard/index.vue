@@ -113,10 +113,12 @@
         <div class="shebei">
           <div class="title">
             <h4>异常设备监控</h4>
-
+          </div>
+          <div class="empty">
+            <img src="@/assets/common/empty.png" alt="">
+            <p>暂无数据</p>
           </div>
         </div>
-
       </el-col>
     </el-row>
   </div>
@@ -235,13 +237,18 @@ export default {
         series: [
           {
             data: this.distributionList,
+            barWidth: 30, // 柱图宽度
+            barMaxWidth: 30, // 最大宽度
             type: 'bar',
             showBackground: true,
             backgroundStyle: {
               color: 'rgba(180, 180, 180, 0.2)'
             }
           }
-        ]
+        ],
+        grid: {
+          x: 70
+        }
       }
 
       option && myChart.setOption(option)
@@ -274,7 +281,10 @@ export default {
                 color: 'rgba(255, 255, 255)'
               }
             }
-          ]
+          ],
+          grid: {
+            x: 70
+          }
         }
 
         option && myChart.setOption(option)
@@ -387,6 +397,18 @@ export default {
     padding: 0;
     margin: 0;
   }
+  .empty{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 123px;
+    height: 96px;
+    }
+}
+
 .dashboard {
   &-container {
    // margin: 30px;
