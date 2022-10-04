@@ -3,7 +3,7 @@
   <div class="result">
     <div class="btn">
       <el-button v-if="$route.path !=='/departments/state'" type="primary" @click="construct">新建</el-button>
-      <el-button v-if="$route.path ==='/departments/departments'" type="warning">批量操作</el-button>
+      <el-button v-if="$route.path ==='/departments/departments'" type="warning" @click="operation">批量操作</el-button>
     </div>
     <div class="bottom">
       <el-table
@@ -11,7 +11,7 @@
         :cell-style="{borderBottom:'0px'}"
         :data="resultList"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
+        @selection-change="changeList"
       >
         <el-table-column type="selection" />
         <el-table-column
@@ -46,16 +46,18 @@
           width="230px"
         >
           <template slot-scope="scope">
-            {{ scope.row.vmStatus === '运营'? 0 :1 }}
+            {{ scope.row.vmStatus }}
           </template>
         </el-table-column>
         <el-table-column
           label="操作"
           width="190px"
         >
-          <span class="caozuo">货道</span>
-          <span class="caozuo">策略</span>
-          <span class="caozuo">修改</span>
+          <template slot-scope="scope">
+            <span class="caozuo" @click="ShowAisle(scope.row.innerCode)">货道</span>
+            <span class="caozuo" @click="showStrategy(scope.row.innerCode)">策略</span>
+            <span class="caozuo">修改</span>
+          </template>
         </el-table-column>
       </el-table>
       <!-- 分页组件 -->
@@ -72,15 +74,25 @@
 
       </div>
     </div>
-
+    <!-- 货道弹窗 -->
+    <aisle :is-show-aisle.sync="isShowAisle" :current-inner-code="currentInnerCode" />
+    <!-- 策略弹框 -->
+    <strategy :current-inner-code="currentInnerCode" :is-show-strategy.sync="isShowStrategy" />
   </div>
 
 </template>
 
 <script>
+import Aisle from '@/views/departments/components/aisle.vue'
+import strategy from '@/views/departments/components/strategy.vue'
 import { getListAPI } from '@/api/equipment'
 export default {
   name: 'FormData',
+  components: {
+    Aisle,
+    strategy
+  },
+
   data() {
     return {
       params: {
@@ -92,8 +104,15 @@ export default {
       // 总数据数
       totalCount: '',
       // 总页数
-      totalPage: ''
-
+      totalPage: '',
+      // 售货机编号列表
+      numberList: '',
+      // 控制货道弹窗
+      isShowAisle: false,
+      // 控制策略弹窗
+      isShowStrategy: false,
+      // 当前点击的货道机器编号
+      currentInnerCode: ''
     }
   },
   created() {
@@ -145,6 +164,32 @@ export default {
       this.params.innerCode = val
 
       this.getList()
+    },
+    construct() {
+      this.$emit('show', 'construct')
+    },
+    changeList(selection) {
+      console.log(selection)
+      this.numberList = selection.map(item => {
+        return item.innerCode
+      })
+      console.log(this.numberList)
+    },
+    operation() {
+      if (this.numberList) {
+        console.log(1)
+        this.$emit('show', 'operation')
+      } else {
+        this.$message.warning('请勾选售货机')
+      }
+    },
+    ShowAisle(innerCode) {
+      this.currentInnerCode = innerCode
+      this.isShowAisle = true
+    },
+    showStrategy(innerCode) {
+      this.currentInnerCode = innerCode
+      this.isShowStrategy = true
     }
   }
 }

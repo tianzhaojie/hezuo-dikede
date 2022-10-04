@@ -1,47 +1,64 @@
 <template>
   <div class="dialog">
-    <el-dialog title="新增设备" :visible.sync="dialogFormVisible" width="630px" center>
-      <el-form ref="ruleForm" :model="form" :rules="rules">
+    <el-dialog
+      title="新增设备"
+      :visible.sync="dialogFormVisible"
+      width="630px"
+      center
+      @close="handleClose"
+    >
+      <el-form
+        ref="ruleForm"
+        :model="Form"
+        :rules="rules"
+      >
         <el-form-item label="设备编号" label-width="120px">
           系统自动生成
         </el-form-item>
-        <el-form-item label="选择型号" label-width="120px" prop="type">
-          <el-select v-model="form.type" placeholder="请选择活动区域">
-            <el-option v-for="item in typeList" :key="item.typeId" :label="item.name" :value="item.name" />
+        <el-form-item label="选择型号" label-width="120px" prop="vmType">
+          <el-select v-model="Form.vmType" placeholder="请选择活动区域">
+            <el-option v-for="item in typeList" :key="item.typeId" :label="item.name" :value="item.typeId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="选择点位" label-width="120px" prop="node">
-          <el-select v-model="form.node" placeholder="请选择活动区域" width="90%">
-            <el-option v-for="item in nodeList" :key="item.id" :label="item.name" :value="item.name" />
+        <el-form-item label="选择点位" label-width="120px" prop="nodeId">
+          <el-select v-model="Form.nodeId" placeholder="请选择活动区域" width="90%">
+            <el-option v-for="item in nodeList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('formName')">确 定</el-button>
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="submitForm()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getTyopeAPI, getNodeAPI } from '@/api/equipment'
+import { getTyopeAPI, getNodeAPI, getAddAPI } from '@/api/equipment'
 export default {
+  name: 'Dialog',
+  props: {
+    dialogFormVisible: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       rules: {
-        type: [
-          { required: true, message: '请选择', trigger: 'change' }
+        vmType: [
+          { required: true, message: '请选择', trigger: 'blur' }
         ],
-        node: [
-          { required: true, message: '请选择', trigger: 'change' }
+        nodeId: [
+          { required: true, message: '请选择', trigger: 'blur' }
         ]
       },
       dialogTableVisible: false,
-      dialogFormVisible: true,
-      form: {
-        type: '',
-        node: ''
+      Form: {
+        vmType: '',
+        nodeId: '',
+        createUserId: ''
       },
       typeList: [],
       nodeList: []
@@ -50,6 +67,7 @@ export default {
   created() {
     this.getType()
     this.getNode()
+    this.Form.createUserId = this.$store.state.user.userId
   },
   methods: {
     // 获取型号
@@ -61,25 +79,28 @@ export default {
     async getNode() {
       const { data } = await getNodeAPI()
       this.nodeList = data.currentPageRecords
-      console.log(data)
+      //   console.log(data)
     },
-    submitForm(formName) {
-      this.dialogFormVisible = true
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+    async submitForm() {
+      await this.$refs.ruleForm.validate()
+      console.log(222)
+      const { data } = await getAddAPI(this.Form)
+      this.handleClose()
+      console.log(data)
+      // 重新渲染
+      this.$parent.$refs.formdata.getList()
+    },
+    handleClose() {
+      this.$emit('update:dialogFormVisible', false)
     }
+
   }
 }
+
 </script>
 
-<style lang="scss" >
- .dialog {
+<style lang="scss" scoped>
+ ::v-deep.dialog {
   .el-select {
   width: 80%;
  }
