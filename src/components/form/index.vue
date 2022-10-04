@@ -76,21 +76,21 @@
     </div>
     <!-- 货道弹窗 -->
     <aisle :is-show-aisle.sync="isShowAisle" :current-inner-code="currentInnerCode" />
-    <!-- 策略弹框 -->
-    <strategy :current-inner-code="currentInnerCode" :is-show-strategy.sync="isShowStrategy" />
+    <!-- 取消策略弹窗 -->
+    <strategy ref="strategy" :is-show-strategy.sync="isShowStrategy" :current-inner-code="currentInnerCode" :strategy-detail.sync="strategyDetail" />
   </div>
 
 </template>
 
 <script>
 import Aisle from '@/views/departments/components/aisle.vue'
-import strategy from '@/views/departments/components/strategy.vue'
-import { getListAPI } from '@/api/equipment'
+import { getListAPI, getStrategyAPI } from '@/api/equipment'
+import Strategy from '@/views/departments/components/strategy.vue'
 export default {
   name: 'FormData',
   components: {
     Aisle,
-    strategy
+    Strategy
   },
 
   data() {
@@ -109,16 +109,24 @@ export default {
       numberList: '',
       // 控制货道弹窗
       isShowAisle: false,
-      // 控制策略弹窗
+      // 控制取消策略弹窗
       isShowStrategy: false,
       // 当前点击的货道机器编号
-      currentInnerCode: ''
+      currentInnerCode: '',
+      // 点击的策略详情
+      strategyDetail: []
     }
   },
   created() {
     this.getList()
   },
   methods: {
+  // 查询当前点击售货机策略
+    async  getStrategy() {
+      const { data } = await getStrategyAPI(this.currentInnerCode)
+      console.log(data)
+      this.strategyDetail = data
+    },
     indexAdd(index) {
       return index + 1 + (this.params.pageIndex - 1) * this.params.pageSize
     },
@@ -189,7 +197,20 @@ export default {
     },
     showStrategy(innerCode) {
       this.currentInnerCode = innerCode
-      this.isShowStrategy = true
+      // this.isShowStrategy = true
+      this.getStrategy()
+      // 防止数据没有更新
+      this.$nextTick(() => {
+        if (this.strategyDetail.length === 0) {
+          console.log('批量')
+          this.numberList = [innerCode]
+          this.$emit('show', 'operation')
+        } else {
+          console.log('详情')
+          this.$refs.strategy.detail(this.strategyDetail)
+          this.isShowStrategy = true
+        }
+      })
     }
   }
 }

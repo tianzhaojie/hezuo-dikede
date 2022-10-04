@@ -60,6 +60,7 @@ export default {
         this.handleClose()
         // 重新渲染
         this.$parent.$refs.formdata.getList()
+        this.$parent.$refs.formdata.getStrategy()
       } catch (error) {
       //  console.log(error.response.data)
         this.$messgae.error(error.response.data)

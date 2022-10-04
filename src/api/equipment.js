@@ -71,4 +71,13 @@ export function delStrategyAPI(innerCode, policyId) {
     url: `/vm-service/vm/cancelPolicy/${innerCode}/${policyId}`
   })
 }
+// // 应用策略
+// export function getSelectAPI() {
+//   return request({
+//     method: 'PUT',
+//     url: '/vm-service/vm/applyPolicy',
+//     data:{
 
+//     }
+//   })
+// }
