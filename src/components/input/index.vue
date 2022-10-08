@@ -2,7 +2,10 @@
   <div>
     <div class="search">
       <el-form :model="form" :inline="true">
-        <el-form-item label="设备编号:">
+        <el-form-item v-if="$route.path === '/departments/type'" label="型号搜索:">
+          <el-input v-model="form.order" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item v-else label="设备编号:">
           <el-input v-model="form.order" placeholder="请输入" />
         </el-form-item>
         <el-form-item>
@@ -21,6 +24,7 @@ export default {
       form: {
         order: ''
       }
+
     }
   },
   methods: {

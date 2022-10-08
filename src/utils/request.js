@@ -53,8 +53,6 @@ serve.interceptors.response.use(response => {
     store.commit('user/REMOVE_USER_INFO')
     store.commit('user/REMOVE_USERID')
     router.push(`/login`)
-  } else {
-    Message.error((error))
   }
   return Promise.reject(error)
 })

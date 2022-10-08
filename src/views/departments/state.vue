@@ -184,4 +184,5 @@ export default {
     border-radius: 2px;
     background-color: #d5ddf8;
  }
+
 </style>

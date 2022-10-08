@@ -17,6 +17,14 @@ export function getTyopeAPI() {
     }
   })
 }
+
+// 获取搜索售货机类型列表
+export function getTypeAPI(params) {
+  return request({
+    url: '/vm-service/vmType/search',
+    params
+  })
+}
 // 获取点位
 export function getNodeAPI() {
   return request({
@@ -103,3 +111,19 @@ export function getReplenishmentAPI(innerCode, start, end) {
   })
 }
 
+// 售货机类型修改
+export function getChangeTypeAPI(typeId, data) {
+  return request({
+    method: 'PUT',
+    url: `/vm-service/vmType/${typeId}`,
+    data
+  })
+}
+// 新增售货机类型
+export function getAddTypeAPI(data) {
+  return request({
+    method: 'POST',
+    url: '/vm-service/vmType',
+    data
+  })
+}

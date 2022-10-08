@@ -61,6 +61,7 @@ export default {
   },
   data() {
     return {
+      load: '1',
       innerVisible: false,
       ChannelList: []
     }

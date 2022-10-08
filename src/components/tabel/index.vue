@@ -85,7 +85,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
  .el-table__header{ width: 100% !important; }
 .el-table__body{ width: 100% !important; }
 .lixian{
@@ -117,4 +117,19 @@ export default {
   color: #5f84ff;
   margin-left: 20px;
 }
+::v-deep .el-table__row{
+  .cell {
+    img{
+  display: block;
+    width: 24px;
+    height: 24px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #f3f6fb;
+    border: 1px solid #f3f6fb;
+ }
+  }
+}
+
 </style>

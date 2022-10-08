@@ -10,7 +10,7 @@
       @close="handleClose"
     >
 
-      <el-form :model="form">
+      <el-form v-if="changeList.type" :model="form">
         <el-form-item label="机器编号:" label-width="120px">
           {{ changeList.innerCode }}
         </el-form-item>
