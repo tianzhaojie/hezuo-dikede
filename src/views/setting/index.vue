@@ -201,7 +201,7 @@ export default {
 
 <style  lang="scss">
 .order{
-  margin-left: 140px;
+  // margin-left: 140px;
   padding: 20px;
   height: 100vh;
   background-color: #f8fafd;
