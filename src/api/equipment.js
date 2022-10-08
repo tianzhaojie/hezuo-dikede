@@ -81,3 +81,25 @@ export function delStrategyAPI(innerCode, policyId) {
 //     }
 //   })
 // }
+
+// 修改点位
+export function ChangeNameAPI(id, nodeId) {
+  return request({
+    method: 'PUT',
+    url: `/vm-service/vm/${id}/${nodeId}`
+  })
+}
+// 获取售货机商品销量
+export function getSalesAPI(innerCode, start, end) {
+  return request({
+    url: `/order-service/report/skuCollect/${innerCode}/${start}/${end}`
+  })
+}
+
+// 获取捕获次数
+export function getReplenishmentAPI(innerCode, start, end) {
+  return request({
+    url: `/task-service/task/supplyCount/${innerCode}/${start}/${end}`
+  })
+}
+

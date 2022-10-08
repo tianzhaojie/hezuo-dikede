@@ -7,6 +7,7 @@
     </div>
     <div class="bottom">
       <el-table
+        v-loading="loading"
         :header-cell-style="{background:'#e1e4e5',color:'#80878f'}"
         :cell-style="{borderBottom:'0px'}"
         :data="resultList"
@@ -56,7 +57,7 @@
           <template slot-scope="scope">
             <span class="caozuo" @click="ShowAisle(scope.row.innerCode)">货道</span>
             <span class="caozuo" @click="showStrategy(scope.row.innerCode)">策略</span>
-            <span class="caozuo">修改</span>
+            <span class="caozuo" @click="showChange(scope.row)">修改</span>
           </template>
         </el-table-column>
       </el-table>
@@ -65,10 +66,11 @@
         <span>共{{ totalCount }}跳数据 &nbsp;&nbsp; 第{{ params.pageIndex }}/{{ totalPage }}页</span>
         <el-pagination
           background
-          layout=" prev, pager, next, slot"
+          layout=" prev, pager, next, slot,total"
           prev-text="上一页"
           next-text="下一页"
           :current-page.sync="params.pageIndex"
+          :disabled="params.pageIndex == totalPage"
           @current-change="currenPage"
         />
 
@@ -78,6 +80,8 @@
     <aisle :is-show-aisle.sync="isShowAisle" :current-inner-code="currentInnerCode" />
     <!-- 取消策略弹窗 -->
     <strategy ref="strategy" :is-show-strategy.sync="isShowStrategy" :current-inner-code="currentInnerCode" :strategy-detail.sync="strategyDetail" />
+    <!-- 修改弹框 -->
+    <Change :dialog-change-visible.sync="dialogChangeVisible" :change-list.sync="ChangeList" />
   </div>
 
 </template>
@@ -86,20 +90,24 @@
 import Aisle from '@/views/departments/components/aisle.vue'
 import { getListAPI, getStrategyAPI } from '@/api/equipment'
 import Strategy from '@/views/departments/components/strategy.vue'
+import Change from '@/views/departments/components/Change.vue'
 export default {
   name: 'FormData',
   components: {
     Aisle,
-    Strategy
+    Strategy,
+    Change
   },
 
   data() {
     return {
+      loading: false,
       params: {
         // 当前页
         pageIndex: 1,
         pageSize: 10
       },
+      dialogChangeVisible: false,
       resultList: [],
       // 总数据数
       totalCount: '',
@@ -114,7 +122,9 @@ export default {
       // 当前点击的货道机器编号
       currentInnerCode: '',
       // 点击的策略详情
-      strategyDetail: []
+      strategyDetail: [],
+      // 当前点击列的详情  用于修改
+      ChangeList: {}
     }
   },
   created() {
@@ -132,6 +142,7 @@ export default {
     },
     async getList() {
       try {
+        this.loading = true
         const { data } = await getListAPI(this.params)
         console.log(data)
         this.resultList = data.currentPageRecords
@@ -148,6 +159,8 @@ export default {
       } catch (error) {
         console.log(2)
         this.$message(error)
+      } finally {
+        this.loading = false
       }
     },
     filter(key) {
@@ -199,7 +212,7 @@ export default {
       this.currentInnerCode = innerCode
       // this.isShowStrategy = true
       this.getStrategy()
-      // 防止数据没有更新
+      // ！！ 防止数据没有更新 请求延迟不一定有用
       this.$nextTick(() => {
         if (this.strategyDetail.length === 0) {
           console.log('批量')
@@ -211,6 +224,11 @@ export default {
           this.isShowStrategy = true
         }
       })
+    },
+    showChange(row) {
+      console.log(row)
+      this.dialogChangeVisible = true
+      this.ChangeList = row
     }
   }
 }
