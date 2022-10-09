@@ -19,7 +19,7 @@ const serve = axios.create({
 // 请求拦截器
 serve.interceptors.request.use(config => {
   //  console.log(router)
-  console.log(config)
+  // console.log(config)
   if (store.getters.token) {
     if (isTokentime()) {
       // 登出处理  业务没有封装在vuex中所以需要 重新写
@@ -46,7 +46,7 @@ serve.interceptors.response.use(response => {
 }, error => {
   if (error.response?.status === 401) {
     // 一般token失效为401
-    console.log(222)
+    // console.log(222)
     Message.error('token,失效')
     // 清空信息
     store.commit('user/REMOVE_TOKEN')

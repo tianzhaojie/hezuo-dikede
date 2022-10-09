@@ -9,7 +9,7 @@ router.beforeEach(async(to, from, next) => {
     if (store.getters.userInfo) { // 没有用户信息
       // 获取用户信息
       const { data } = await getUserInfo(store.state.user.userId)
-      console.log(data)
+      // console.log(data)
       store.commit('user/SET_USER_INFO', data)
     }
     if (to.path === '/login') {

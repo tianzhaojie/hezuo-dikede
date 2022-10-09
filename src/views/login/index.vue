@@ -92,7 +92,7 @@ export default {
         // 将图片转化为img标签可识别的url
         this.imgData = url
       } catch (error) {
-        console.log(1)
+        console.log(error)
       }
     },
     btn() {
@@ -102,7 +102,7 @@ export default {
       try {
         this.loading = true
         const { data } = await loginAPI(this.loginForm)
-        console.log(data)
+        // console.log(data)
 
         if (data.msg === '登录成功') {
           this.$store.commit('user/SET_TOKEN', data.token)

@@ -7,19 +7,19 @@ export default {
     {
       path: 'area',
       name: 'area',
-      component: () => import('@/views/attendances/components/area.vue'),
+      component: () => import('@/views/attendances/area.vue'),
       meta: { title: '区域管理' }
     },
     {
       path: 'point',
       name: 'point',
-      component: () => import('@/views/attendances/components/point.vue'),
+      component: () => import('@/views/attendances/point.vue'),
       meta: { title: '点位管理' }
     },
     {
       path: 'partners',
       name: 'partners',
-      component: () => import('@/views/attendances/components/partners.vue'),
+      component: () => import('@/views/attendances/partners.vue'),
       meta: { title: '合作商管理' }
     }
   ]
