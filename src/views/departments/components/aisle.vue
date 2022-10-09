@@ -1,52 +1,64 @@
 <template>
   <div>
-    <el-dialog title="货道设置" :visible.sync=" isShowAisle" width="940px" center @close="handleClose" @open="open">
+    <el-dialog title="货道设置" :visible=" isShowAisle" width="940px" center @close="handleClose" @open="open">
       <el-dialog
         width="30%"
-        title="内层 Dialog"
-        :visible.sync="innerVisible"
+        title="智能排货"
+        :visible="innerVisible"
         append-to-body
+        @close="innerVisible = false"
       />
       <div class="main">
         <div class="channel-basic">
           <div class="box">
-            <span>货道行数</span>
-            <span>货道列数</span>
-            <span>货道容量</span>
+            <span>货道行数:{{ channelMaxCapacity }}</span>
+            <span>货道列数:{{ vmCol }}</span>
+            <span>货道容量:{{ vmRow }}</span>
           </div>
-          <el-button type="primary">智能排货</el-button>
+          <el-button type="primary" @click="goods">智能排货</el-button>
         </div>
-        <div class="channel">
-          <el-row v-infinite-scroll="load" type="flex" style="overflow:auto">
-            <el-col
-              v-for="item in ChannelList"
-              :key="item.channelId
-              "
-              :span="12"
-            >
-              <div class="pig">
-                <img
-                  v-if="item.sku"
-                  :src="item.sku.skuImage"
-                  alt=""
-                >
-                <div v-if="item.sku">{{ item.sku.brandName }}</div>
-              </div>
-              <span>添加</span><span>删除</span>
-            </el-col>
-          </el-row>
-        </div>
-      </div>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>
+        <div class="channel">
+          <el-scrollbar style="height:100%;">
+            <el-row v-for="item,index in ChannelList" :key="index" type="flex">
+              <el-col
+                v-for="val in item"
+                :key="val.channelId
+                "
+                :span="12"
+              >
+                <div class="item">
+                  <div class="pig">
+
+                    <img
+                      v-if="val.sku"
+                      :src="val.sku.skuImage"
+                      alt=""
+                    >
+
+                    <img v-else src="@/assets/common/goods/1111.png" alt="">
+                    <span class="label">{{ val.channelCode }}</span>
+                    <div v-if="val.sku">{{ val.sku.brandName }}</div>
+                    <div v-else>暂无商品</div>
+                  </div>
+                  <span class="add">添加</span><span class="del">删除</span>
+                </div>
+
+              </el-col>
+            </el-row>
+          </el-scrollbar>
+        </div>
+
       </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleClose">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getChannelDetailAPI } from '@/api/equipment'
+import { getChannelDetailAPI, getVmtype } from '@/api/equipment'
 export default {
   name: 'Aisle',
   props: {
@@ -57,20 +69,32 @@ export default {
     currentInnerCode: {
       type: String,
       default: ''
+    },
+    row: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
       load: '1',
       innerVisible: false,
-      ChannelList: []
+      ChannelList: [],
+      vmCol: '',
+      vmRow: '',
+      channelMaxCapacity: ''
     }
   },
   methods: {
     async getChannelDetail() {
+      const res = await getVmtype(this.row.type.typeId)
+      this.channelMaxCapacity = res.data.channelMaxCapacity
+      this.vmCol = res.data.vmCol
+      this.vmRow = res.data.vmRow
       const { data } = await getChannelDetailAPI(this.currentInnerCode)
       console.log(data)
-      this.ChannelList = data
+      for (var i = 0; i < data.length; i += this.vmCol) { this.ChannelList.push(data.slice(i, i + this.vmCol)) }
+      console.log(this.ChannelList)
     },
     handleClose() {
       this.$emit('update:isShowAisle', false)
@@ -79,6 +103,9 @@ export default {
     open() {
       console.log(1)
       this.getChannelDetail()
+    },
+    goods() {
+      this.innerVisible = true
     }
   }
 }
@@ -99,12 +126,65 @@ export default {
       span {
         margin-right: 100px;
       }
+
     }
   }
   ::v-deep.channel{
+    width: 814px;
+    height: 384px;
+    margin: 0 auto;
     .pig {
+      width: 150px;
       height: 135px;
-      background-color: #f6f7fb;
+      padding-top: 16px;
+    background-color: #f6f7fb;
+    border-radius: 4px;
+      img {
+    display: inline-block;
+    width: 84px;
+    height: 78px;
+    margin-bottom: 10px;
+    -o-object-fit: contain;
+    object-fit: contain;
+      }
     }
+    .item {
+      position: relative;
+    width: 150px;
+    height: 180px;
+    background: #fff;
+    -webkit-box-shadow: 0 2px 4px 0 rgb(0 0 0 / 6%);
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 6%);
+    border-radius: 4px;
+    text-align: center;
+
+    .add{
+        color: #5f84ff;
+        padding: 10px;
+      cursor: pointer;
+      }
+      .del{
+        color: #ff5a5a;
+        padding: 10px;
+      cursor: pointer;
+      }
+    }
+  }
+  .el-scrollbar{
+    width: 750px;
+    height: 384px;
+    margin: 0 auto;
+  }
+  .label{
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 43px;
+    height: 23px;
+    line-height: 23px;
+    background: #829bed;
+    border-radius: 0 10px 10px 0;
+    font-size: 12px;
+    color: #fff;
   }
 </style>

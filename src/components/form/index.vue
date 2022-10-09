@@ -55,7 +55,7 @@
           width="190px"
         >
           <template slot-scope="scope">
-            <span class="caozuo" @click="ShowAisle(scope.row.innerCode)">货道</span>
+            <span class="caozuo" @click="ShowAisle(scope.row)">货道</span>
             <span class="caozuo" @click="showStrategy(scope.row.innerCode)">策略</span>
             <span class="caozuo" @click="showChange(scope.row)">修改</span>
           </template>
@@ -66,18 +66,17 @@
         <span>共{{ totalCount }}跳数据 &nbsp;&nbsp; 第{{ params.pageIndex }}/{{ totalPage }}页</span>
         <el-pagination
           background
-          layout=" prev, pager, next, slot,total"
+          layout=" prev, pager, next, slot"
           prev-text="上一页"
           next-text="下一页"
           :current-page.sync="params.pageIndex"
-          :disabled="params.pageIndex == totalPage"
           @current-change="currenPage"
         />
 
       </div>
     </div>
     <!-- 货道弹窗 -->
-    <aisle :is-show-aisle.sync="isShowAisle" :current-inner-code="currentInnerCode" />
+    <aisle :is-show-aisle.sync="isShowAisle" :current-inner-code="currentInnerCode" :row="row" />
     <!-- 取消策略弹窗 -->
     <strategy ref="strategy" :is-show-strategy.sync="isShowStrategy" :current-inner-code="currentInnerCode" :strategy-detail.sync="strategyDetail" />
     <!-- 修改弹框 -->
@@ -119,12 +118,14 @@ export default {
       isShowAisle: false,
       // 控制取消策略弹窗
       isShowStrategy: false,
-      // 当前点击的货道机器编号
+      // 当前点击的货道详情
       currentInnerCode: '',
       // 点击的策略详情
       strategyDetail: [],
       // 当前点击列的详情  用于修改
-      ChangeList: {}
+      ChangeList: {},
+      // 当前点击的row
+      row: {}
     }
   },
   created() {
@@ -204,8 +205,9 @@ export default {
         this.$message.warning('请勾选售货机')
       }
     },
-    ShowAisle(innerCode) {
-      this.currentInnerCode = innerCode
+    ShowAisle(row) {
+      this.row = row
+      this.currentInnerCode = row.innerCode
       this.isShowAisle = true
     },
     showStrategy(innerCode) {
@@ -226,7 +228,6 @@ export default {
       })
     },
     showChange(row) {
-      console.log(row)
       this.dialogChangeVisible = true
       this.ChangeList = row
     }

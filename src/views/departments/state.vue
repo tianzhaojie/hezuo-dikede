@@ -169,6 +169,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+.el-table__header{ width: 100% !important; }
+.el-table__body{ width: 100% !important; }
  .page{
   display: flex;
   justify-content: space-between;

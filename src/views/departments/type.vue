@@ -17,10 +17,11 @@
       <span>共{{ totalCount }}跳数据 &nbsp;&nbsp; 第{{ params.pageIndex }}/{{ totalPage }}页</span>
       <el-pagination
         background
-        layout=" prev, pager, next, slot,total"
+        layout=" prev, pager, next, slot"
         prev-text="上一页"
         next-text="下一页"
         :current-page.sync="params.pageIndex"
+        :total="+totalCount"
         @current-change="currenPage"
       />
     </div>
@@ -92,6 +93,7 @@ export default {
         const { data } = await getTypeAPI(this.params)
         this.resultList = data.currentPageRecords
         this.totalCount = data.totalCount
+        console.log(this.totalCount)
         this.totalPage = data.totalPage
         console.log(this.totalPage)
       } catch (error) {

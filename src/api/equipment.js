@@ -127,3 +127,10 @@ export function getAddTypeAPI(data) {
     data
   })
 }
+
+// / 售货机类型查询
+export function getVmtype(typeId) {
+  return request({
+    url: `/vm-service/vmType/${typeId}`
+  })
+}
