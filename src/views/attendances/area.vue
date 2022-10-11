@@ -3,8 +3,8 @@
     <!-- 区域搜索 -->
     <div class="level">
       <span style="padding: 10px;">区域搜所:</span>
-      <el-input v-model="input" placeholder="请输入内容" clearable style="width:206px; padding: 10px;" />
-      <el-button type="primary" icon="el-icon-search">搜索</el-button>
+      <el-input v-model="page.name" placeholder="请输入内容" clearable style="width:206px; padding: 10px;" />
+      <el-button type="primary" icon="el-icon-search" @click="getSearch">搜索</el-button>
     </div>
     <!-- 新建 -->
     <div class="list-container">
@@ -193,9 +193,9 @@ export default {
     return {
       page: {
         pageIndex: 1, // 当前页码
-        pageSize: 10
+        pageSize: 10,
+        name: '' // 搜索内容
       },
-      input: '', // 搜索内容
       tableData: [], // 数据
       currentRow: null, // 默认选中
       pageIndex: '', // 当前页码
