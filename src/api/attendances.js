@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 // 获取区域列表
-
 export const getSearch = (params) => {
   return request({
     url: '/vm-service/region/search',
@@ -35,7 +34,7 @@ export function modifierSrea(id, data) {
 }
 /**
  * 获取区域详情
- * @param {*} regionId
+ * @param {*} regionId // id
  * @returns
  */
 export function viewDetailss(regionId) {
@@ -53,17 +52,6 @@ export function DeleteArea(id) {
   return request({
     method: 'DELETE',
     url: `/vm-service/region/${id}`
-  })
-}
-/**
- * 获取合作商列表
- * @param {*} params 当前页码，每页数据个数，区域名称
- * @returns
- */
-export function getPartnerListAPI(params) {
-  return request({
-    url: '/user-service/partner/search',
-    params
   })
 }
 /**
@@ -142,5 +130,16 @@ export function DeletePoint(id) {
   return request({
     method: 'DELETE',
     url: `/vm-service/node/${id}`
+  })
+}
+/**
+ * 获取合作商列表
+ * @param {*} params 当前页码，每页数据个数，区域名称
+ * @returns
+ */
+export function getPartnerListAPI(params) {
+  return request({
+    url: '/user-service/partner/search',
+    params
   })
 }

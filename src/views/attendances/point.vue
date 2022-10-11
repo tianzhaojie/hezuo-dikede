@@ -402,12 +402,11 @@ export default {
         this.loading = false
       }
     },
-    // 修改
     // 修改数据回显
     async modification(row) {
       this.centerDialogVisible1 = true
       this.rows = row
-      console.log(row)
+      // console.log(row)
       this.ruleForm = {
         name: row.name, // 名称
         addr: row.addr, // 详细地址
@@ -424,7 +423,7 @@ export default {
       this.loading = true
       try {
         const data = await ModifyThePoint(this.rows.id, this.ruleForm)
-        console.log(data)
+        // console.log(data)
         if (data.data === true) {
           this.$message.success('修改成功')
           this.centerDialogVisible1 = false
@@ -432,6 +431,8 @@ export default {
         } else {
           this.$message.error('修改失败')
         }
+      } catch (e) {
+        console.error(e)
       } finally {
         this.loading = false
       }

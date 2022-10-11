@@ -230,6 +230,7 @@ export default {
     handleCurrentChange(val) {
       this.currentRow = val
     },
+    // 获取列表
     async getSearch() {
       const { data } = await getSearch(this.page)
       // console.log(data.currentPageRecords)
@@ -301,6 +302,7 @@ export default {
       this.rowss = data
       // console.log(this.rowss)
     },
+    // 删除
     async DeleteArea(id) {
       // console.log(id)
       try {
